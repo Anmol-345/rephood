@@ -1,6 +1,17 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🍽️ Rephood - The Recipe Ingredient Marketplace
 
-## Getting Started
+**Rephood** is a modern, Web3-powered food and grocery marketplace built with Next.js 16 and Wagmi. It connects home chefs with local farms, markets, and specialty stores to deliver fresh ingredients while rewarding sustainable practices.
+
+## 🌟 Key Features
+
+- **Cinematic Hero Experience** - Stunning full-viewport hero section with Web3 wallet connectivity
+- **Dynamic Shopping Cart** - Track items in your cart with live updates and total calculation
+- **Real-Time Inventory** - Live stock indicators showing availability from local suppliers
+- **Trusted Supplier Network** - Featured brands and suppliers with interactive hover effects
+- **Optimized for Performance** - Next.js 16 with image optimization and clean architecture
+- **Responsive Design** - Seamless experience across desktop and mobile devices
+
+## 🚀 Getting Started
 
 First, run the development server:
 
