@@ -144,7 +144,9 @@ export default function DemoSection() {
   const logEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    logEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (logs.length > 0) {
+      logEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
   }, [logs]);
 
   // Reset when agent changes

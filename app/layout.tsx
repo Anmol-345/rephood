@@ -10,9 +10,12 @@ const interTight = Inter_Tight({
 });
 
 export const metadata: Metadata = {
-  title: "Rephood — Checkout, reinvented",
+  title: "RepHood — Agentic Reputation Engine",
   description:
-    "The fastest way to add a cinematic checkout experience to your SaaS product.",
+    "Verifiable on-chain reputation for every wallet. Computed by AI agents. Settled on Robinhood Chain.",
+  icons: {
+    icon: "/icon.svg",
+  },
 };
 
 import Web3Provider from "@/components/Web3Provider";
