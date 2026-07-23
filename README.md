@@ -115,9 +115,17 @@ The design is deliberately editorial and institutional — no gradients, no neon
 
 ---
 
-## Ecosystem
+## 🔗 Public Proofs & Integration
 
-- **[Virtuals Protocol](https://virtuals.io)** — The AI agent framework powering the reputation pipeline.
+- **Virtuals Protocol ACP V2 Integration**: [scripts/register-agent.ts](scripts/register-agent.ts) demonstrates a complete event-driven setup using Privy Smart Wallets and the `@account-kit/infra` SDK.
+- **On-Chain Settlement**: [contracts/RepHoodAttestation.sol](contracts/RepHoodAttestation.sol) is the deterministic Robinhood testnet contract where agents commit IPFS hashes containing the reputation $\Delta R$ computations.
+- **Cryptographic Payloads**: [proofs/proof-01.json](proofs/proof-01.json) contains a sample evaluation record structure pinned via Pinata IPFS.
+
+---
+
+## 🌐 Ecosystem
+
+- **[Virtuals Protocol](https://virtuals.io)** — The AI agent framework powering the reputation pipeline (via V2 ACP Node).
 - **Robinhood Chain** — Arbitrum Orbit L3 where attestations are settled on-chain.
 
 ---

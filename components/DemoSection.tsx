@@ -1,6 +1,6 @@
 "use client";
 
-import { useAccount, useConnect, useDisconnect } from "wagmi";
+import { useAccount, useConnect, useDisconnect, useWriteContract } from "wagmi";
 import { injected } from "wagmi/connectors";
 import { useState, useEffect, useRef } from "react";
 
@@ -136,16 +136,49 @@ function TopBanner() {
 
 /* ─── Main Section ───────────────────────────────────────────────────────── */
 export default function DemoSection() {
+  const [agentsList, setAgentsList] = useState<Agent[]>(AGENTS);
   const [selectedAgent, setSelectedAgent] = useState<Agent>(AGENTS[0]);
   const [logs, setLogs] = useState<{ text: string; type: string }[]>([]);
   const [isAuditing, setIsAuditing] = useState(false);
   const [liveScore, setLiveScore] = useState<number | null>(null);
   const [auditComplete, setAuditComplete] = useState(false);
-  const logEndRef = useRef<HTMLDivElement>(null);
+  const terminalRef = useRef<HTMLDivElement>(null);
+  const { writeContractAsync } = useWriteContract();
+
+  // Try fetching live Virtuals on mount, fallback to local AGENTS if API fails
+  useEffect(() => {
+    fetch("https://api.virtuals.io/api/virtuals")
+      .then((res) => {
+        if (!res.ok) throw new Error("API not available or 500 Server Error");
+        return res.json();
+      })
+      .then((data) => {
+        if (data && data.data && Array.isArray(data.data) && data.data.length > 0) {
+          const liveAgents: Agent[] = data.data.slice(0, 3).map((v: any, i: number) => ({
+            id: `VAGT-LIVE-${v.id || i}`,
+            name: v.name || "Unknown Agent",
+            type: v.symbol ? `Tokenized Agent (${v.symbol})` : "Live Agent",
+            networkAge: `${Math.floor(Math.random() * 500 + 100)} Blocks`,
+            flagStatus: "0 Anomalies Detected",
+            flagCount: 0,
+            trustScore: 85.0 + (Math.random() * 10 - 5), // Random 80-90 score
+            vtx: v.volume || Math.floor(Math.random() * 5000 + 500),
+            aAge: 365,
+            mFlag: 0,
+            ipfsHash: "QmLiveHashPlaceholder1234567890abcdef...",
+          }));
+          setAgentsList(liveAgents);
+          setSelectedAgent(liveAgents[0]);
+        }
+      })
+      .catch((e) => {
+        console.warn("Virtuals API unavailable (Expected during V2 beta). Falling back to RepHood mock data.", e);
+      });
+  }, []);
 
   useEffect(() => {
-    if (logs.length > 0) {
-      logEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (terminalRef.current) {
+      terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
     }
   }, [logs]);
 
@@ -192,6 +225,51 @@ export default function DemoSection() {
     const w1 = 0.42, w2 = 0.31, w3 = 0.27;
     const delta = w1 * Math.log(vtx) + w2 * (aAge / 100) - w3 * mFlag;
     const newScore = Math.min(100, +(selectedAgent.trustScore + delta * 0.1).toFixed(1));
+
+    let ipfsHashFinal = "QmMockHash...";
+    let txHash = "0xMockTx...";
+    try {
+      // 1. IPFS Upload (Pinata Mock/Placeholder)
+      const ipfsRes = await fetch("https://api.pinata.cloud/pinning/pinJSONToIPFS", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_PINATA_JWT || "mock_jwt"}`,
+        },
+        body: JSON.stringify({
+          pinataContent: { agentId: id, trustScore: newScore, metrics: { vtx, aAge, mFlag } }
+        })
+      });
+      if (ipfsRes.ok) {
+        const ipfsData = await ipfsRes.json();
+        ipfsHashFinal = ipfsData.IpfsHash || ipfsHashFinal;
+      }
+      setLogs((prev) => [...prev, { text: `> IPFS Hash: ${ipfsHashFinal}`, type: "data" }]);
+
+      // 2. On-chain Attestation
+      if (writeContractAsync) {
+        txHash = await writeContractAsync({
+          address: "0xA5156f798A8A88abA63907F06E6865E874EF1535", // Deployed contract address
+          abi: [{
+            name: "emitAttestation",
+            type: "function",
+            stateMutability: "nonpayable",
+            inputs: [
+              { name: "agentId", type: "string" },
+              { name: "trustScore", type: "uint256" },
+              { name: "ipfsHash", type: "string" }
+            ],
+            outputs: []
+          }],
+          functionName: "emitAttestation",
+          args: [id, BigInt(Math.floor(newScore * 100)), ipfsHashFinal]
+        });
+      }
+      setLogs((prev) => [...prev, { text: `> Transaction Hash: ${txHash}`, type: "data" }]);
+    } catch (e) {
+      setLogs((prev) => [...prev, { text: `> Transaction failed or mock used.`, type: "warn" }]);
+    }
+
     setLiveScore(newScore);
     setAuditComplete(true);
     setIsAuditing(false);
@@ -240,7 +318,7 @@ export default function DemoSection() {
               Agent Directory
             </span>
             <span className="text-[11px] text-white/20">
-              {AGENTS.length} agents indexed
+              {agentsList.length} agents indexed
             </span>
           </div>
 
@@ -262,7 +340,7 @@ export default function DemoSection() {
           </div>
 
           {/* Agent Rows */}
-          {AGENTS.map((agent) => {
+          {agentsList.map((agent) => {
             const isActive = selectedAgent.id === agent.id;
             return (
               <button
@@ -376,6 +454,7 @@ export default function DemoSection() {
           <div className="flex flex-col flex-1 px-8 py-6 gap-6">
             {/* Terminal Viewport */}
             <div
+              ref={terminalRef}
               className="flex-1 min-h-[260px] max-h-[340px] overflow-y-auto p-5"
               style={{
                 background: "#090a0a",
@@ -413,7 +492,6 @@ export default function DemoSection() {
               {isAuditing && (
                 <span className="text-white/40 text-[11px] animate-pulse">█</span>
               )}
-              <div ref={logEndRef} />
             </div>
 
             {/* Audit Trigger Button */}

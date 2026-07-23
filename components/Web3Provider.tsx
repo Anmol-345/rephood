@@ -2,13 +2,25 @@
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { WagmiProvider, createConfig, http } from 'wagmi';
-import { arbitrum } from 'wagmi/chains';
+import { defineChain } from 'viem';
 import { useState } from 'react';
 
+const robinhoodChain = defineChain({
+  id: 7233, // Placeholder for Robinhood Chain ID
+  name: 'Robinhood Chain',
+  nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
+  rpcUrls: {
+    default: { http: ['https://rpc.robinhood.chain'] }, // Placeholder RPC
+  },
+  blockExplorers: {
+    default: { name: 'Robinhood Explorer', url: 'https://explorer.robinhood.chain' },
+  },
+});
+
 const config = createConfig({
-  chains: [arbitrum],
+  chains: [robinhoodChain],
   transports: {
-    [arbitrum.id]: http(),
+    [robinhoodChain.id]: http(),
   },
 });
 

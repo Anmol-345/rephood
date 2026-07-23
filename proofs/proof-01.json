@@ -1,0 +1,8 @@
+{
+  "agentId": "VAGT-001",
+  "agentWalletAddress": "0x1234567890abcdef1234567890abcdef12345678",
+  "chain": "Robinhood Chain",
+  "blockNumber": "12345678",
+  "transactionHash": "0xMockTxHash1234567890abcdef1234567890abcdef1234567890abcdef1234",
+  "ipfsAuditUri": "ipfs://QmMockHash1234567890abcdef1234567890abcdef123"
+}
