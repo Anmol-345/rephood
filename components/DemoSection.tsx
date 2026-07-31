@@ -285,7 +285,7 @@ export default function DemoSection() {
   };
 
   return (
-    <div style={{ background: "#0f1010" }}>
+    <div id="demo-section" style={{ background: "#0f1010" }}>
       <div className="w-[90%] mx-auto" style={{ border: "1px solid #1e2020", borderTop: "none" }}>
       <TopBanner />
 
@@ -496,6 +496,7 @@ export default function DemoSection() {
 
             {/* Audit Trigger Button */}
             <button
+              id="telemetry-audit-btn"
               onClick={handleAudit}
               disabled={isAuditing}
               className="w-full py-3.5 text-sm tracking-[0.12em] uppercase transition-colors"

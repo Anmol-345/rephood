@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import Navbar from "./Navbar";
 import Badge from "./Badge";
@@ -40,7 +42,18 @@ export default function Hero() {
           {/* Right Column: Call to Action and Description */}
           <div className="max-w-md shrink-0">
             <div className="mb-10">
-              <button className="bg-white text-black px-6 py-3 text-xs font-bold tracking-widest uppercase flex items-center group transition-colors hover:bg-gray-200">
+              <button 
+                onClick={() => {
+                  const demoSection = document.getElementById('demo-section');
+                  if (demoSection) {
+                    demoSection.scrollIntoView({ behavior: 'smooth' });
+                    setTimeout(() => {
+                      document.getElementById('telemetry-audit-btn')?.click();
+                    }, 800);
+                  }
+                }}
+                className="bg-white text-black px-6 py-3 text-xs font-bold tracking-widest uppercase flex items-center group transition-colors hover:bg-gray-200"
+              >
                 Run Audit
                 <svg className="w-4 h-4 ml-3 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M14 5l7 7m0 0l-7 7m7-7H3" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path></svg>
               </button>
