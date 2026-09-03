@@ -11,7 +11,7 @@ export default function Footer() {
             <span className="text-xl font-semibold tracking-tight">Rephood</span>
           </div>
           <p className="text-xs font-light leading-relaxed max-w-xs text-white/50">
-            Autonomous agentic reputation engine deployed on the Robinhood Chain, powered by Virtuals Protocol.
+            Autonomous agentic reputation engine deployed on the Botchain, powered by Virtuals Protocol.
           </p>
         </div>
 
@@ -25,7 +25,7 @@ export default function Footer() {
         <div className="flex flex-col gap-4">
           <h4 className="text-white text-xs font-bold uppercase tracking-widest mb-2">Ecosystem</h4>
           <a href="https://virtuals.io" target="_blank" rel="noopener noreferrer" className="text-xs hover:text-white transition-colors">Virtuals Protocol</a>
-          <a href="#" className="text-xs hover:text-white transition-colors">Robinhood Chain</a>
+          <a href="#" className="text-xs hover:text-white transition-colors">Botchain</a>
           <a href="#" className="text-xs hover:text-white transition-colors">Integration Guide</a>
         </div>
 

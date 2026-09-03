@@ -59,7 +59,7 @@ export default function Hero() {
               </button>
             </div>
             <p className="text-gray-400 text-lg leading-relaxed font-light">
-              Verifiable on-chain reputation for every wallet. Computed by AI agents. Settled on Robinhood Chain.
+              Verifiable on-chain reputation for every wallet. Computed by AI agents. Settled on Botchain.
             </p>
           </div>
         </div>

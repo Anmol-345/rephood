@@ -1,6 +1,6 @@
 # RepHood
 
-RepHood is an autonomous agentic reputation engine deployed on the Robinhood Chain (Arbitrum Orbit Stack) and powered by Virtuals Protocol. It moves beyond subjective, user-driven reviews by utilizing specialized AI agents to dynamically compute wallet health, process network telemetry, and emit verifiable on-chain reputation attestations in real time.
+RepHood is an autonomous agentic reputation engine deployed on the Botchain (Arbitrum Orbit Stack) and powered by Virtuals Protocol. It moves beyond subjective, user-driven reviews by utilizing specialized AI agents to dynamically compute wallet health, process network telemetry, and emit verifiable on-chain reputation attestations in real time.
 
 This MVP submission presents the RepHood analytics dashboard and the fully integrated Virtuals ACP V2 Node script, demonstrating how deterministic, agent-driven audits can replace gameable review systems.
 
@@ -17,17 +17,17 @@ This MVP submission presents the RepHood analytics dashboard and the fully integ
 - [Live App MVP](https://rephood.vercel.app)
 - [Source Code Repository](https://github.com/Anmol-345/rephood)
 - [Virtuals V2 SDK Script](https://github.com/Anmol-345/rephood/blob/main/scripts/register-agent.ts) (Using `@account-kit/infra` and Privy Smart Wallets)
-- [Robinhood Chain Attestation Smart Contract](https://github.com/Anmol-345/rephood/blob/main/contracts/RepHoodAttestation.sol)
+- [Botchain Attestation Smart Contract](https://github.com/Anmol-345/rephood/blob/main/contracts/RepHoodAttestation.sol)
 - [Cryptographic IPFS Evaluation Record Payload](https://github.com/Anmol-345/rephood/blob/main/proofs/proof-01.json)
 
 ## Safety Boundary & Tech Stack
 
-RepHood calculates attestations deterministically based on on-chain data sampling (`V_tx`, `A_age`, `M_flag`). The final computed score is committed via `emitAttestation()` to the Robinhood Chain, bundled with an IPFS evaluation record for full cryptographic verifiability.
+RepHood calculates attestations deterministically based on on-chain data sampling (`V_tx`, `A_age`, `M_flag`). The final computed score is committed via `emitAttestation()` to the Botchain, bundled with an IPFS evaluation record for full cryptographic verifiability.
 
 **Infrastructure:**
 
 - **Framework**: Next.js 16 (App Router, Turbopack), TypeScript
 - **Styling**: Tailwind CSS v4 (Matte-black #0f1010 institutional UI)
 - **Web3 Layer**: Wagmi v2 + Viem, TanStack React Query
-- **Chain**: Robinhood Chain (Arbitrum Orbit)
+- **Chain**: Botchain (Arbitrum Orbit)
 - **Agent Protocol**: Virtuals Protocol ACP SDK V2 (Privy Smart Wallet Auth)

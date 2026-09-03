@@ -12,7 +12,7 @@ const interTight = Inter_Tight({
 export const metadata: Metadata = {
   title: "RepHood — Agentic Reputation Engine",
   description:
-    "Verifiable on-chain reputation for every wallet. Computed by AI agents. Settled on Robinhood Chain.",
+    "Verifiable on-chain reputation for every wallet. Computed by AI agents. Settled on Botchain.",
   icons: {
     icon: "/icon.svg",
   },

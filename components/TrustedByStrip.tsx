@@ -6,8 +6,8 @@ export default function TrustedByStrip() {
       width: 20,
     },
     {
-      name: "Robinhood",
-      img: "https://logo.clearbit.com/robinhood.com",
+      name: "Botchain",
+      img: "https://logo.clearbit.com/botchain.com",
       width: 20,
     },
   ];

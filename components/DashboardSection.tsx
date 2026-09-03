@@ -98,7 +98,7 @@ function TopBanner() {
       <div className="flex items-center gap-3">
         <div className="w-1.5 h-1.5 rounded-full bg-white" />
         <span className="text-[11px] tracking-[0.18em] uppercase text-white/40">
-          Robinhood Chain — Arbitrum Orbit
+          Botchain
         </span>
       </div>
 
@@ -135,13 +135,16 @@ function TopBanner() {
 }
 
 /* ─── Main Section ───────────────────────────────────────────────────────── */
-export default function DemoSection() {
+export default function DashboardSection() {
   const [agentsList, setAgentsList] = useState<Agent[]>(AGENTS);
   const [selectedAgent, setSelectedAgent] = useState<Agent>(AGENTS[0]);
   const [logs, setLogs] = useState<{ text: string; type: string }[]>([]);
   const [isAuditing, setIsAuditing] = useState(false);
   const [liveScore, setLiveScore] = useState<number | null>(null);
   const [auditComplete, setAuditComplete] = useState(false);
+  const [agentNonces, setAgentNonces] = useState<Record<string, number>>({});
+  const [isRating, setIsRating] = useState(false);
+  const [hasRatedLocal, setHasRatedLocal] = useState<Record<string, boolean>>({});
   const terminalRef = useRef<HTMLDivElement>(null);
   const { writeContractAsync } = useWriteContract();
 
@@ -199,6 +202,23 @@ export default function DemoSection() {
 
     const { name, id, vtx, aAge, mFlag } = selectedAgent;
 
+    const currentNonce = agentNonces[id] || 0;
+    
+    // Fetch Cryptographic Signature from Secure Backend
+    const res = await fetch("/api/sign-telemetry", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ agentId: id, vtx, aAge, mFlag, nonce: currentNonce })
+    });
+
+    if (!res.ok) {
+      setLogs((prev) => [...prev, { text: `> Failed to generate cryptographic signature from backend.`, type: "warn" }]);
+      setIsAuditing(false);
+      return;
+    }
+
+    const { signature } = await res.json();
+
     const steps: { text: string; type: string }[] = [
       { text: `> Initializing telemetry audit for ${name} [${id}]`, type: "init" },
       { text: `> Connecting to Virtuals Protocol relay...`, type: "info" },
@@ -206,12 +226,14 @@ export default function DemoSection() {
       { text: `> Sampling V_tx (Transaction Volume) — raw = ${vtx} ops`, type: "data" },
       { text: `> Sampling A_age (Network Age) — ${aAge} epoch cycles`, type: "data" },
       { text: `> Sampling M_flag (Anomaly Flags) — count = ${mFlag}`, type: mFlag > 0 ? "warn" : "data" },
-      { text: `> Applying ΔR formula...`, type: "info" },
+      { text: `> Backend generating cryptographic signature...`, type: "info" },
+      { text: `> Sig: ${signature.slice(0, 24)}...`, type: "data" },
+      { text: `> Passing signed telemetry vectors to Smart Contract...`, type: "info" },
       {
         text: `> ΔR = 0.42 · log(${vtx}) + 0.31 · ${aAge} − 0.27 · ${mFlag}`,
         type: "formula",
       },
-      { text: `> Invoking emitAttestation() on Robinhood Chain...`, type: "info" },
+      { text: `> Invoking computeAndEmitAttestation() on Botchain...`, type: "info" },
       { text: `> IPFS evaluation record committed.`, type: "info" },
       { text: `> ✓ Attestation confirmed. RepHood score updated.`, type: "success" },
     ];
@@ -249,23 +271,27 @@ export default function DemoSection() {
       // 2. On-chain Attestation
       if (writeContractAsync) {
         txHash = await writeContractAsync({
-          address: "0xA5156f798A8A88abA63907F06E6865E874EF1535", // Deployed contract address
+          address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS as `0x${string}`, // Pulls securely from Vercel Env
           abi: [{
-            name: "emitAttestation",
+            name: "computeAndEmitAttestation",
             type: "function",
             stateMutability: "nonpayable",
             inputs: [
               { name: "agentId", type: "string" },
-              { name: "trustScore", type: "uint256" },
-              { name: "ipfsHash", type: "string" }
+              { name: "vtx", type: "uint256" },
+              { name: "aAge", type: "uint256" },
+              { name: "mFlag", type: "uint256" },
+              { name: "ipfsHash", type: "string" },
+              { name: "signature", type: "bytes" }
             ],
             outputs: []
           }],
-          functionName: "emitAttestation",
-          args: [id, BigInt(Math.floor(newScore * 100)), ipfsHashFinal]
+          functionName: "computeAndEmitAttestation",
+          args: [id, BigInt(vtx), BigInt(aAge), BigInt(mFlag), ipfsHashFinal, signature]
         });
       }
       setLogs((prev) => [...prev, { text: `> Transaction Hash: ${txHash}`, type: "data" }]);
+      setAgentNonces((prev) => ({ ...prev, [id]: currentNonce + 1 }));
     } catch (e) {
       setLogs((prev) => [...prev, { text: `> Transaction failed or mock used.`, type: "warn" }]);
     }
@@ -273,6 +299,34 @@ export default function DemoSection() {
     setLiveScore(newScore);
     setAuditComplete(true);
     setIsAuditing(false);
+  };
+
+  const handleRate = async (rating: number) => {
+    if (!selectedAgent) return;
+    try {
+      setIsRating(true);
+      const txHash = await writeContractAsync({
+        address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS as `0x${string}`,
+        abi: [{
+          name: "rateAgent",
+          type: "function",
+          stateMutability: "nonpayable",
+          inputs: [
+            { name: "agentId", type: "string" },
+            { name: "rating", type: "uint8" }
+          ],
+          outputs: []
+        }],
+        functionName: "rateAgent",
+        args: [selectedAgent.id, rating]
+      });
+      setLogs((prev) => [...prev, { text: `> Public Feedback TX: ${txHash}`, type: "data" }]);
+      setHasRatedLocal(prev => ({...prev, [selectedAgent.id]: true}));
+    } catch (e) {
+      setLogs((prev) => [...prev, { text: `> Feedback transaction failed or rejected.`, type: "warn" }]);
+    } finally {
+      setIsRating(false);
+    }
   };
 
   const logTypeStyle = (type: string) => {
@@ -431,6 +485,35 @@ export default function DemoSection() {
                     </span>
                   </div>
                 ))}
+              </div>
+
+              {/* Public Feedback Rating */}
+              <div className="mt-5 pt-5 border-t border-white/5">
+                <span className="text-[10px] text-white/25 uppercase tracking-wider block mb-3">
+                  Public Feedback
+                </span>
+                <div className="flex gap-1">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <button
+                      key={star}
+                      onClick={() => handleRate(star)}
+                      disabled={isRating || hasRatedLocal[selectedAgent.id]}
+                      className={`text-xl transition-colors ${
+                        hasRatedLocal[selectedAgent.id] 
+                          ? 'text-white/20' 
+                          : 'text-white/40 hover:text-yellow-400'
+                      }`}
+                      style={{ filter: isRating ? 'blur(2px)' : 'none' }}
+                    >
+                      ★
+                    </button>
+                  ))}
+                </div>
+                {hasRatedLocal[selectedAgent.id] && (
+                  <p className="text-[9px] text-white/30 mt-2 tracking-wide">
+                    FEEDBACK RECORDED ON-CHAIN
+                  </p>
+                )}
               </div>
             </div>
           </div>

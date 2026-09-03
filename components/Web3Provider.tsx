@@ -5,22 +5,22 @@ import { WagmiProvider, createConfig, http } from 'wagmi';
 import { defineChain } from 'viem';
 import { useState } from 'react';
 
-const robinhoodChain = defineChain({
-  id: 7233, // Placeholder for Robinhood Chain ID
-  name: 'Robinhood Chain',
+const botchain = defineChain({
+  id: 7233, // Placeholder for Botchain ID
+  name: 'Botchain',
   nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
   rpcUrls: {
-    default: { http: ['https://rpc.robinhood.chain'] }, // Placeholder RPC
+    default: { http: ['https://rpc.botchain.chain'] }, // Placeholder RPC
   },
   blockExplorers: {
-    default: { name: 'Robinhood Explorer', url: 'https://explorer.robinhood.chain' },
+    default: { name: 'Botchain Explorer', url: 'https://explorer.botchain.chain' },
   },
 });
 
 const config = createConfig({
-  chains: [robinhoodChain],
+  chains: [botchain],
   transports: {
-    [robinhoodChain.id]: http(),
+    [botchain.id]: http(),
   },
 });
 

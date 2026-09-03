@@ -1,8 +1,8 @@
 # RepHood
 
-**Autonomous Agentic Reputation Engine on Robinhood Chain**
+**Autonomous Agentic Reputation Engine on Botchain**
 
-RepHood is a premium, institutional-grade reputation analytics platform powered by [Virtuals Protocol](https://virtuals.io) and deployed on the **Robinhood Chain** (Arbitrum Orbit Stack). It moves beyond subjective, user-driven reviews — instead, specialized AI agents dynamically compute wallet health, process network telemetry, and emit verifiable on-chain reputation attestations in real time.
+RepHood is a premium, institutional-grade reputation analytics platform powered by [Virtuals Protocol](https://virtuals.io) and deployed on the **Botchain** (Arbitrum Orbit Stack). It moves beyond subjective, user-driven reviews — instead, specialized AI agents dynamically compute wallet health, process network telemetry, and emit verifiable on-chain reputation attestations in real time.
 
 ---
 
@@ -16,7 +16,7 @@ Traditional reputation systems are slow, gameable, and subjective. RepHood repla
    ```
    ΔR = w₁ · log(V_tx) + w₂ · A_age − w₃ · M_flag
    ```
-4. **On-Chain Attestation** — The final score is committed via `emitAttestation()` to the Robinhood Chain, with an IPFS evaluation record for cryptographic verifiability.
+4. **On-Chain Attestation** — The final score is committed via `emitAttestation()` to the Botchain, with an IPFS evaluation record for cryptographic verifiability.
 
 ---
 
@@ -28,7 +28,7 @@ Traditional reputation systems are slow, gameable, and subjective. RepHood repla
 | **Styling** | Tailwind CSS v4 |
 | **Web3 / Wallet** | Wagmi v2 + Viem |
 | **Query Layer** | TanStack React Query |
-| **Chain** | Robinhood Chain (Arbitrum Orbit) |
+| **Chain** | Botchain (Arbitrum Orbit) |
 | **Agent Protocol** | Virtuals Protocol |
 | **Language** | TypeScript |
 
@@ -42,7 +42,7 @@ Traditional reputation systems are slow, gameable, and subjective. RepHood repla
 - **Live Pipeline Audit Station** — Execute real-time telemetry audits via a terminal-style console that streams agent data step-by-step.
 - **Reputation Delta Engine** — On-screen display of the `ΔR` formula and live score computation after each audit.
 - **Institutional UI** — Strict matte-black (#0f1010) aesthetic with 1px border layouts, no gradients or neon accents.
-- **Footer** — Ecosystem links for Virtuals Protocol, Robinhood Chain, and documentation.
+- **Footer** — Ecosystem links for Virtuals Protocol, Botchain, and documentation.
 
 ---
 
@@ -118,7 +118,7 @@ The design is deliberately editorial and institutional — no gradients, no neon
 ## 🔗 Public Proofs & Integration
 
 - **Virtuals Protocol ACP V2 Integration**: [scripts/register-agent.ts](scripts/register-agent.ts) demonstrates a complete event-driven setup using Privy Smart Wallets and the `@account-kit/infra` SDK.
-- **On-Chain Settlement**: [contracts/RepHoodAttestation.sol](contracts/RepHoodAttestation.sol) is the deterministic Robinhood testnet contract where agents commit IPFS hashes containing the reputation $\Delta R$ computations.
+- **On-Chain Settlement**: [contracts/RepHoodAttestation.sol](contracts/RepHoodAttestation.sol) is the deterministic Botchain testnet contract where agents commit IPFS hashes containing the reputation $\Delta R$ computations.
 - **Cryptographic Payloads**: [proofs/proof-01.json](proofs/proof-01.json) contains a sample evaluation record structure pinned via Pinata IPFS.
 
 ---
@@ -126,7 +126,7 @@ The design is deliberately editorial and institutional — no gradients, no neon
 ## 🌐 Ecosystem
 
 - **[Virtuals Protocol](https://virtuals.io)** — The AI agent framework powering the reputation pipeline (via V2 ACP Node).
-- **Robinhood Chain** — Arbitrum Orbit L3 where attestations are settled on-chain.
+- **Botchain** — Arbitrum Orbit L3 where attestations are settled on-chain.
 
 ---
 
