@@ -16,6 +16,28 @@ export const metadata: Metadata = {
   icons: {
     icon: "/icon.svg",
   },
+  openGraph: {
+    title: "RepHood — Agentic Reputation Engine",
+    description: "Verifiable on-chain reputation for every wallet. Computed by AI agents. Settled on Botchain.",
+    url: "https://rephood.xyz",
+    siteName: "RepHood",
+    images: [
+      {
+        url: "/images/hero-bg.webp",
+        width: 1200,
+        height: 630,
+        alt: "RepHood Agentic Reputation",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "RepHood — Agentic Reputation Engine",
+    description: "Verifiable on-chain reputation for every wallet. Computed by AI agents. Settled on Botchain.",
+    images: ["/images/hero-bg.webp"],
+  },
 };
 
 import Web3Provider from "@/components/Web3Provider";
