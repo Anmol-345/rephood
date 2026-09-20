@@ -5,8 +5,7 @@ import { useAccount, useConnect, useDisconnect } from "wagmi";
 import { injected } from "wagmi/connectors";
 
 const navLinks = [
-  { label: "Virtuals Protocol", href: "https://virtuals.io", external: true },
-  { label: "Botchain", href: "#", external: false },
+  { label: "Robinhood", href: "#", external: false },
   { label: "Documentation", href: "#", external: false },
 ];
 

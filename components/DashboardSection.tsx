@@ -98,7 +98,7 @@ function TopBanner() {
       <div className="flex items-center gap-3">
         <div className="w-1.5 h-1.5 rounded-full bg-white" />
         <span className="text-[11px] tracking-[0.18em] uppercase text-white/40">
-          Botchain
+          Robinhood
         </span>
       </div>
 
@@ -233,7 +233,7 @@ export default function DashboardSection() {
         text: `> ΔR = 0.42 · log(${vtx}) + 0.31 · ${aAge} − 0.27 · ${mFlag}`,
         type: "formula",
       },
-      { text: `> Invoking computeAndEmitAttestation() on Botchain...`, type: "info" },
+      { text: `> Invoking computeAndEmitAttestation() on Robinhood...`, type: "info" },
       { text: `> IPFS evaluation record committed.`, type: "info" },
       { text: `> ✓ Attestation confirmed. RepHood score updated.`, type: "success" },
     ];

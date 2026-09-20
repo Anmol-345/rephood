@@ -12,13 +12,13 @@ const interTight = Inter_Tight({
 export const metadata: Metadata = {
   title: "RepHood — Agentic Reputation Engine",
   description:
-    "Verifiable on-chain reputation for every wallet. Computed by AI agents. Settled on Botchain.",
+    "Verifiable on-chain reputation for every wallet. Computed by AI agents. Settled on Robinhood.",
   icons: {
     icon: "/icon.svg",
   },
   openGraph: {
     title: "RepHood — Agentic Reputation Engine",
-    description: "Verifiable on-chain reputation for every wallet. Computed by AI agents. Settled on Botchain.",
+    description: "Verifiable on-chain reputation for every wallet. Computed by AI agents. Settled on Robinhood.",
     url: "https://rephood.xyz",
     siteName: "RepHood",
     images: [
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "RepHood — Agentic Reputation Engine",
-    description: "Verifiable on-chain reputation for every wallet. Computed by AI agents. Settled on Botchain.",
+    description: "Verifiable on-chain reputation for every wallet. Computed by AI agents. Settled on Robinhood.",
     images: ["/images/hero-bg.webp"],
   },
 };

@@ -3,7 +3,7 @@ pragma solidity ^0.8.20;
 
 /**
  * @title RepHoodAttestation
- * @dev Autonomous Agentic Reputation Engine on Botchain (ECDSA Verified)
+ * @dev Autonomous Agentic Reputation Engine on Robinhood (ECDSA Verified)
  */
 contract RepHoodAttestation {
     
