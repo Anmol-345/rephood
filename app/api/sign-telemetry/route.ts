@@ -24,6 +24,14 @@ export async function POST(req: NextRequest) {
     
     // Create the account from the secure key
     const backendSigner = privateKeyToAccount(formattedKey as `0x${string}`);
+    
+    console.log("=== DIAGNOSTICS: BACKEND SIGNER ===");
+    console.log("Derived Address from Private Key:", backendSigner.address);
+    console.log("Expected AGENT_WALLET_ADDRESS:", process.env.AGENT_WALLET_ADDRESS);
+    
+    if (backendSigner.address.toLowerCase() !== process.env.AGENT_WALLET_ADDRESS?.toLowerCase()) {
+      console.warn("WARNING: The private key derives a DIFFERENT address than AGENT_WALLET_ADDRESS!");
+    }
 
     // Hash payload: agentId(string), vtx(uint256), aAge(uint256), mFlag(uint256), nonce(uint256)
     const messageHash = keccak256(

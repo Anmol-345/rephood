@@ -3,7 +3,7 @@ import { createPublicClient, http } from 'viem';
 const txHash = '0x10b5c41d3acd1f01939b839d6b5e1517d6868c92bd21786c5561b36b954f84e3';
 
 const rpcs = [
-  { name: 'Robinhood', url: 'https://rpc.testnet.chain.robinhood.com' },
+  { name: 'Botchain Mainnet', url: 'https://rpc.botchain.ai' },
   { name: 'Base', url: 'https://mainnet.base.org' },
   { name: 'Ethereum Mainnet', url: 'https://cloudflare-eth.com' }
 ];
