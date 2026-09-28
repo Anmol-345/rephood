@@ -42,7 +42,15 @@ export async function POST(req: NextRequest) {
     );
     
     // Sign the hash
-    const signature = await backendSigner.signMessage({ message: { raw: messageHash } });
+    let signature = await backendSigner.signMessage({ message: { raw: messageHash } });
+
+    // Standardize `v` value to 27/28 for ecrecover compatibility
+    const vHex = signature.slice(-2);
+    if (vHex === '00') {
+      signature = signature.slice(0, -2) + '1b'; // 27 in hex
+    } else if (vHex === '01') {
+      signature = signature.slice(0, -2) + '1c'; // 28 in hex
+    }
 
     return NextResponse.json({ signature }, { status: 200 });
 

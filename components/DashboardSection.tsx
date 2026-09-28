@@ -287,7 +287,8 @@ export default function DashboardSection() {
             outputs: []
           }],
           functionName: "computeAndEmitAttestation",
-          args: [id, BigInt(vtx), BigInt(aAge), BigInt(mFlag), ipfsHashFinal, signature]
+          args: [id, BigInt(vtx), BigInt(aAge), BigInt(mFlag), ipfsHashFinal, signature],
+          gas: BigInt(500000) // Explicit gas limit to prevent inflated wallet estimates
         });
       }
       setLogs((prev) => [...prev, { text: `> Transaction Hash: ${txHash}`, type: "data" }]);
