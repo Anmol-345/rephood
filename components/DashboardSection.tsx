@@ -1,6 +1,6 @@
 "use client";
 
-import { useAccount, useConnect, useDisconnect, useWriteContract } from "wagmi";
+import { useAccount, useConnect, useDisconnect, useWriteContract, useReadContract } from "wagmi";
 import { injected } from "wagmi/connectors";
 import { useState, useEffect, useRef } from "react";
 
@@ -142,11 +142,24 @@ export default function DashboardSection() {
   const [isAuditing, setIsAuditing] = useState(false);
   const [liveScore, setLiveScore] = useState<number | null>(null);
   const [auditComplete, setAuditComplete] = useState(false);
-  const [agentNonces, setAgentNonces] = useState<Record<string, number>>({});
   const [isRating, setIsRating] = useState(false);
   const [hasRatedLocal, setHasRatedLocal] = useState<Record<string, boolean>>({});
   const terminalRef = useRef<HTMLDivElement>(null);
   const { writeContractAsync } = useWriteContract();
+
+  // Fetch the real on-chain nonce to prevent signature mismatches on page reload
+  const { data: onChainNonce } = useReadContract({
+    address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS as `0x${string}`,
+    abi: [{
+      name: "agentNonces",
+      type: "function",
+      stateMutability: "view",
+      inputs: [{ name: "agentId", type: "string" }],
+      outputs: [{ name: "", type: "uint256" }]
+    }],
+    functionName: "agentNonces",
+    args: [selectedAgent.id]
+  });
 
   // Try fetching live Virtuals on mount, fallback to local AGENTS if API fails
   useEffect(() => {
@@ -202,7 +215,7 @@ export default function DashboardSection() {
 
     const { name, id, vtx, aAge, mFlag } = selectedAgent;
 
-    const currentNonce = agentNonces[id] || 0;
+    const currentNonce = Number(onChainNonce || 0);
     
     // Fetch Cryptographic Signature from Secure Backend
     const res = await fetch("/api/sign-telemetry", {
