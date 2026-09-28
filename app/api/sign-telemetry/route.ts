@@ -1,15 +1,29 @@
 import { NextRequest, NextResponse } from "next/server";
-import { keccak256, encodePacked } from "viem";
+import { keccak256, encodePacked, createPublicClient, http } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { agentId, vtx, aAge, mFlag, nonce } = body;
+    let { agentId, vtx, aAge, mFlag, nonce } = body;
 
     // Validate required fields
-    if (!agentId || vtx === undefined || aAge === undefined || mFlag === undefined || nonce === undefined) {
+    if (!agentId || vtx === undefined || aAge === undefined || mFlag === undefined) {
       return NextResponse.json({ error: "Missing required telemetry fields" }, { status: 400 });
+    }
+
+    try {
+      const publicClient = createPublicClient({ transport: http('https://rpc.botchain.ai') });
+      const onChainNonce = await publicClient.readContract({
+        address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS as `0x${string}`,
+        abi: [{ name: "agentNonces", type: "function", stateMutability: "view", inputs: [{ name: "agentId", type: "string" }], outputs: [{ name: "", type: "uint256" }] }],
+        functionName: "agentNonces",
+        args: [agentId]
+      });
+      nonce = Number(onChainNonce);
+    } catch (e) {
+      console.warn("Failed to fetch on-chain nonce in backend, falling back to frontend nonce:", e);
+      nonce = nonce || 0;
     }
 
     // Securely pull the private key from Vercel Environment Variables
